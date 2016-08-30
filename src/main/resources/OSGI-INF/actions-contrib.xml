@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="com.nuxeo.contentview.selection.actions">
+
+  <require>org.nuxeo.ecm.platform.actions</require>
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="actions">
+
+    <!-- bulk edit box cannot work correctly without fine-grained form management 
+      ==> disable -->
+
+    <action id="CURRENT_SELECTION_EDIT" enabled="false" />
+
+    <!-- redefine copy/paste/delete/add to workspace actions -->
+
+    <action id="CURRENT_SELECTION_COPY" link="#{clipboardActions.putSelectionInClipboard}"
+      label="command.clipboard.copy" icon="" order="10">
+      <category>CURRENT_SELECTION_LIST</category>
+      <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
+      <filter-id>canCopyFromCurrentSelection</filter-id>
+    </action>
+
+    <action id="CURRENT_SELECTION_ADDTOLIST" link="#{clipboardActions.putSelectionInDefaultWorkList}"
+      label="help.command.clipboard.addworklist" icon="" order="30">
+      <category>CURRENT_SELECTION_LIST</category>
+      <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
+      <filter-id>canCopyFromCurrentSelection</filter-id>
+      <filter id="no_addtolist_for_domains">
+        <rule grant="false">
+          <type>Root</type>
+        </rule>
+      </filter>
+    </action>
+
+    <action id="CLIPBOARD_PASTE" link="#{clipboardActions.pasteClipboard}"
+      label="command.clipboard.paste" icon="" order="20">
+      <category>CURRENT_SELECTION_LIST</category>
+      <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
+      <filter id="canPastFromClipboard">
+        <rule grant="true">
+          <condition>#{clipboardActions.canPasteFromClipboard}</condition>
+        </rule>
+      </filter>
+    </action>
+
+    <action id="CURRENT_SELECTION_DELETE" link="#{deleteActions.purgeSelection}"
+      label="command.deleteDocs" icon="" help="command.deleteDocs.help"
+      confirm="if( !confirmDeleteDocumentsForever() ) return false;">
+      <category>CURRENT_SELECTION_TRASH_LIST</category>
+      <filter id="canPurge">
+        <rule grant="true">
+          <condition>#{deleteActions.canPurge}</condition>
+        </rule>
+      </filter>
+    </action>
+
+    <action id="CURRENT_SELECTION_EMPTY_TRASH" link="#{deleteActions.emptyTrash}"
+      label="command.emptyTrash" icon="" help="command.emptyTrash.help"
+      confirm="if( !confirmEmptyTrash() ) return false;">
+      <category>CURRENT_SELECTION_TRASH_LIST</category>
+      <filter id="canEmptyTrash">
+        <rule grant="true">
+          <condition>#{deleteActions.canEmptyTrash}</condition>
+        </rule>
+      </filter>
+    </action>
+
+    <action id="CURRENT_SELECTION_UNDELETE" link="#{deleteActions.undeleteSelection}"
+      label="command.undeleteDocs" icon="" help="command.undeleteDocs.help"
+      confirm="if( !confirmUndeleteDocuments() ) return false;">
+      <category>CURRENT_SELECTION_TRASH_LIST</category>
+
+      <filter id="canPurge">
+        <rule grant="true">
+          <condition>#{deleteActions.canPurge}</condition>
+        </rule>
+      </filter>
+
+    </action>
+
+    <action id="CURRENT_SELECTION_TRASH" link="#{deleteActions.deleteSelection}"
+      label="command.trashDocs" icon="" help="comand.trashDocs.help"
+      confirm="if( !confirmDeleteDocuments() ) return false;" order="1000">
+      <category>CURRENT_SELECTION_LIST</category>
+      <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
+
+      <filter id="canDelete">
+        <rule grant="true">
+          <condition>#{deleteActions.canDelete}</condition>
+        </rule>
+      </filter>
+
+    </action>
+
+  </extension>
+
+</component>
