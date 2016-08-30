@@ -13,11 +13,11 @@
 
     <!-- redefine copy/paste/delete/add to workspace actions -->
 
-    <action id="CURRENT_SELECTION_COPY" link="#{clipboardActions.putSelectionInClipboard}"
+    <action id="CURRENT_SELECTION_COPY"
+      link="#{contentViewSelectionActions.putSelectionInClipboard(contentView, 'canCopyFromCurrentSelection')}"
       label="command.clipboard.copy" icon="" order="10">
       <category>CURRENT_SELECTION_LIST</category>
       <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
-      <filter-id>canCopyFromCurrentSelection</filter-id>
     </action>
 
     <action id="CURRENT_SELECTION_ADDTOLIST" link="#{clipboardActions.putSelectionInDefaultWorkList}"
