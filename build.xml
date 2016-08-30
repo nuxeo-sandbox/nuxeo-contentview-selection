@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<project name="Nuxeo EP" default="web-tomcat" basedir=".">
+  <property file="build.properties" />
+
+  <property name="tomcat.dir" value="/opt/tomcat" />
+  <property name="tomcat.nuxeo.ear" value="${tomcat.dir}/nxserver" />
+  <property name="tomcat.bundles.dir" value="${tomcat.nuxeo.ear}/bundles" />
+  <property name="tomcat.nuxeo.war.dir"
+            value="${tomcat.dir}/nxserver/nuxeo.war" />
+  <property name="tomcat.seam.hotdeploy.dir"
+            value="${tomcat.nuxeo.war.dir}/WEB-INF/dev" />
+
+  <target name="web-tomcat"
+          description="Deploy Web components to the live Tomcat server">
+    <copy todir="${tomcat.nuxeo.war.dir}">
+      <fileset dir="${basedir}/src/main/resources/web/nuxeo.war" />
+    </copy>
+  </target>
+
+</project>
