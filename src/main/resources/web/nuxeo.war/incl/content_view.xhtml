@@ -225,7 +225,10 @@
               });
             </h:outputScript>
 
+            <h:form id="#{provider.currentSelectPage.name}_#{contentViewId}">
+
             <ui:decorate template="/incl/documents_layout_table.xhtml">
+              <ui:param name="removeForm" value="true" />
               <ui:param name="providerId" value="#{contentViewId}" />
               <ui:param name="documents" value="#{provider.currentSelectPage}" />
               <ui:param name="layoutName"
@@ -284,6 +287,8 @@
               </ui:define>
 
             </ui:decorate>
+
+            </h:form>
 
           </a4j:outputPanel>
 
