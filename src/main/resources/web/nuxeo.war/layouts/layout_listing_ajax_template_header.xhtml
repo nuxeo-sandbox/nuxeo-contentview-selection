@@ -18,29 +18,12 @@
       <nxl:layoutColumn>
         <th dir="auto">
           <c:choose>
-            <c:when test="#{layoutColumn.properties.isListingSelectionBox}">
+            <c:when test="#{layoutColumn.properties.isListingSelectionBox or layoutColumn.properties.isListingSelectionBoxWithCurrentDocument}">
               <h:selectBooleanCheckbox id="#{layoutColumn.widgets[0].name}_header"
                 styleClass="tipsyShow tipsyGravitySW"
                 title="#{messages['tooltip.content.select.all']}"
                 onchange="javascript:handleAllCheckBoxes(this.form.name, this.checked)"
-                value="#{documents.selected}">
-                <a4j:ajax event="click"
-                  execute="@this"
-                  listener="#{documentListingActions.processSelectPage(contentView.name, contentView.selectionListName, documents.selected)}"
-                  render="#{formId}_upper_buttons:ajax_selection_upper_buttons #{formId}_buttons:ajax_selection_buttons" />
-              </h:selectBooleanCheckbox>
-            </c:when>
-            <c:when test="#{layoutColumn.properties.isListingSelectionBoxWithCurrentDocument}">
-              <h:selectBooleanCheckbox id="#{layoutColumn.widgets[0].name}_header"
-                styleClass="tipsyShow tipsyGravitySW"
-                title="#{messages['tooltip.content.select.all']}"
-                onchange="javascript:handleAllCheckBoxes(this.form.name, this.checked)"
-                value="#{documents.selected}">
-                <a4j:ajax event="click"
-                  execute="@this"
-                  listener="#{documentListingActions.checkCurrentDocAndProcessSelectPage(contentView.name, contentView.selectionListName, documents.selected, currentDocument.ref)}"
-                  render="#{formId}_upper_buttons:ajax_selection_upper_buttons #{formId}_buttons:ajax_selection_buttons" />
-              </h:selectBooleanCheckbox>
+                value="#{documents.selected}" />
             </c:when>
             <c:when test="#{layoutColumn.properties.useFirstWidgetLabelAsColumnHeader}">
               <c:choose>

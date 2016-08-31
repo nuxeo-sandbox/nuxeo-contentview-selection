@@ -27,6 +27,7 @@
     default. optional, defaults to false (available since 5.6).
   - foldedIfEmpty: if set to true and foldable, foldable box is folded if
     there are no results. optional, defaults to false (available since 5.6).
+  - addFormAroundListing: adds a form around the whole listing.
   - removeForm: if set to true, do not enclose the listing with a form
     (optional, available since 5.5, defaults to false).
   - useAjaxForm: if removeForm is not set or set to false, use an ajax form if
@@ -73,6 +74,10 @@
 
 </c:if>
 
+<c:set var="addFormAroundListing"
+  value="true" />
+
+
 <nxu:set var="finalDefaultPageSize"
   value="#{nxu:test(empty defaultPageSize, -1, defaultPageSize)}">
 <nxu:set var="finalSortInfos"
@@ -113,7 +118,6 @@
 
   <nxu:set var="provider" value="#{contentView.currentPageProvider}"
     cache="false">
-    #{provider.setSelectedEntries(documentsListsManager.getWorkingList(contentView.selectionListName))}
   <c:if test="#{not hideEmpty or not empty provider.currentPage or (contentView.showFilterForm and nxd:isDirty(contentView.searchDocumentModel))}">
     <nxu:set var="finalFolded"
       value="#{nxu:test(foldedByDefault or (foldedIfEmpty and empty provider.currentPage), true, false)}"
@@ -225,10 +229,11 @@
               });
             </h:outputScript>
 
-            <h:form id="#{provider.currentSelectPage.name}_#{contentViewId}">
+            <nxu:form id="#{provider.currentSelectPage.name}_#{contentViewId}"
+              skip="#{!addFormAroundListing}">
 
             <ui:decorate template="/incl/documents_layout_table.xhtml">
-              <ui:param name="removeForm" value="true" />
+              <ui:param name="removeForm" value="#{nxu:test(addFormAroundListing==null, removeForm, addFormAroundListing)}" />
               <ui:param name="providerId" value="#{contentViewId}" />
               <ui:param name="documents" value="#{provider.currentSelectPage}" />
               <ui:param name="layoutName"
@@ -288,7 +293,7 @@
 
             </ui:decorate>
 
-            </h:form>
+            </nxu:form>
 
           </a4j:outputPanel>
 

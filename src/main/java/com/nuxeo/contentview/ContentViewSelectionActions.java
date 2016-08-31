@@ -10,6 +10,7 @@
 package com.nuxeo.contentview;
 
 import static org.jboss.seam.ScopeType.EVENT;
+import static org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager.CURRENT_DOCUMENT_SELECTION;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.nuxeo.ecm.platform.contentview.jsf.ContentView;
 import org.nuxeo.ecm.platform.query.api.PageSelection;
 import org.nuxeo.ecm.platform.query.api.PageSelections;
 import org.nuxeo.ecm.webapp.action.ActionContextProvider;
+import org.nuxeo.ecm.webapp.action.DeleteActions;
 import org.nuxeo.ecm.webapp.clipboard.ClipboardActions;
 import org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager;
 
@@ -44,6 +46,9 @@ public class ContentViewSelectionActions {
     protected ClipboardActions clipboardActions;
 
     @In(required = false, create = true)
+    protected DeleteActions deleteActions;
+
+    @In(required = false, create = true)
     protected transient ActionManager actionManager;
 
     @In(create = true, required = false)
@@ -51,6 +56,18 @@ public class ContentViewSelectionActions {
 
     @In(create = true, required = false)
     protected FacesMessages facesMessages;
+
+    protected boolean saveContentViewSelection(ContentView cv, String filterId) {
+        if (cv == null) {
+            return false;
+        }
+        List<DocumentModel> s = getSelectedDocuments(cv);
+        documentsListsManager.addToWorkingList(cv.getSelectionListName(), s);
+        if (!checkFilter(filterId, cv, s)) {
+            return false;
+        }
+        return true;
+    }
 
     protected List<DocumentModel> getSelectedDocuments(ContentView cv) {
         List<DocumentModel> selected = new ArrayList<DocumentModel>();
@@ -78,15 +95,39 @@ public class ContentViewSelectionActions {
     }
 
     public void putSelectionInClipboard(ContentView cv, String filterId) {
-        if (cv == null) {
-            return;
+        if (saveContentViewSelection(cv, filterId)) {
+            clipboardActions.putSelectionInClipboard();
         }
-        List<DocumentModel> s = getSelectedDocuments(cv);
-        documentsListsManager.addToWorkingList(cv.getSelectionListName(), s);
-        if (!checkFilter(filterId, cv, s)) {
-            return;
+    }
+
+    public void putSelectionInDefaultWorkList(ContentView cv, String filterId) {
+        if (saveContentViewSelection(cv, filterId)) {
+            clipboardActions.putSelectionInDefaultWorkList();
         }
-        clipboardActions.putSelectionInClipboard();
+    }
+
+    public void purgeSelection(ContentView cv, String filterId) {
+        if (saveContentViewSelection(cv, filterId)) {
+            deleteActions.purgeSelection(cv.getSelectionListName());
+        }
+    }
+
+    public void undeleteSelection(ContentView cv, String filterId) {
+        if (saveContentViewSelection(cv, filterId)) {
+            String listName = cv.getSelectionListName();
+            if (!documentsListsManager.isWorkingListEmpty(listName)) {
+                deleteActions.undeleteSelection(documentsListsManager.getWorkingList(listName));
+            }
+        }
+    }
+
+    public void deleteSelection(ContentView cv, String filterId) {
+        if (saveContentViewSelection(cv, filterId)) {
+            String listName = cv.getSelectionListName();
+            if (!documentsListsManager.isWorkingListEmpty(listName)) {
+                deleteActions.deleteSelection(documentsListsManager.getWorkingList(listName));
+            }
+        }
     }
 
 }

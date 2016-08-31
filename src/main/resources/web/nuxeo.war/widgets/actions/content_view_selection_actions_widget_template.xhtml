@@ -3,7 +3,6 @@
   xmlns:nxu="http://nuxeo.org/nxweb/util"
   xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:c="http://java.sun.com/jstl/core"
-  xmlns:nxwt="http://nuxeo.org/nxforms/runtime/widgettype"
   test="true">
 
 <c:forEach var="actionCategory" items="#{contentView.actionsCategories}" varStatus="status">
@@ -13,7 +12,7 @@
     <c:if test="#{not status.first and not empty actions}">
       <br />
     </c:if>
-    <nxwt:actions
+    <nxl:widgetType name="actions"
       mode="view"
       widgetName="cvButton"
       label=""
@@ -22,7 +21,7 @@
       actionStyleClass="button"
       actionsDisplay="buttons"
       ignoreTemplateProperty="true"
-      addForm="false" />
+      addForm="{!addFormAroundListing}" />
   </nxu:set>
 </c:forEach>
 

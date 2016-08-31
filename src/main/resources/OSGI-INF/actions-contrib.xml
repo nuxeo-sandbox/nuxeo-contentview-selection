@@ -13,83 +13,81 @@
 
     <!-- redefine copy/paste/delete/add to workspace actions -->
 
-    <action id="CURRENT_SELECTION_COPY"
+    <action id="CURRENT_SELECTION_COPY" enabled="false"
+      link="#{clipboardActions.putSelectionInClipboard}" label="command.clipboard.copy"
+      icon="" order="10">
+      <category>CURRENT_SELECTION_LIST</category>
+      <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
+      <filter-id>canCopyFromCurrentSelection</filter-id>
+    </action>
+
+    <action id="CURRENT_SELECTION_COPY_SEL" enabled="true"
       link="#{contentViewSelectionActions.putSelectionInClipboard(contentView, 'canCopyFromCurrentSelection')}"
       label="command.clipboard.copy" icon="" order="10">
       <category>CURRENT_SELECTION_LIST</category>
       <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
     </action>
 
-    <action id="CURRENT_SELECTION_ADDTOLIST" link="#{clipboardActions.putSelectionInDefaultWorkList}"
-      label="help.command.clipboard.addworklist" icon="" order="30">
+    <action id="CURRENT_SELECTION_ADDTOLIST" enabled="false"
+      link="#{clipboardActions.putSelectionInDefaultWorkList}" label="help.command.clipboard.addworklist"
+      icon="" order="30">
       <category>CURRENT_SELECTION_LIST</category>
       <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
       <filter-id>canCopyFromCurrentSelection</filter-id>
-      <filter id="no_addtolist_for_domains">
-        <rule grant="false">
-          <type>Root</type>
-        </rule>
-      </filter>
+      <filter-id>no_addtolist_for_domains</filter-id>
     </action>
 
-    <action id="CLIPBOARD_PASTE" link="#{clipboardActions.pasteClipboard}"
-      label="command.clipboard.paste" icon="" order="20">
+    <action id="CURRENT_SELECTION_ADDTOLIST_SEL" enabled="true"
+      link="#{contentViewSelectionActions.putSelectionInDefaultWorkList(contentView, 'canCopyFromCurrentSelection')}"
+      label="help.command.clipboard.addworklist" icon="" order="30">
       <category>CURRENT_SELECTION_LIST</category>
       <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
-      <filter id="canPastFromClipboard">
-        <rule grant="true">
-          <condition>#{clipboardActions.canPasteFromClipboard}</condition>
-        </rule>
-      </filter>
+      <filter-id>no_addtolist_for_domains</filter-id>
     </action>
 
-    <action id="CURRENT_SELECTION_DELETE" link="#{deleteActions.purgeSelection}"
+    <action id="CURRENT_SELECTION_DELETE" enabled="false"
+      link="#{deleteActions.purgeSelection}" label="command.deleteDocs" icon=""
+      help="command.deleteDocs.help" confirm="if( !confirmDeleteDocumentsForever() ) return false;">
+      <category>CURRENT_SELECTION_TRASH_LIST</category>
+      <filter-id>canPurge</filter-id>
+    </action>
+
+    <action id="CURRENT_SELECTION_DELETE_SEL" enabled="true"
+      link="#{contentViewSelectionActions.purgeSelection(contentView, 'canPurge')}"
       label="command.deleteDocs" icon="" help="command.deleteDocs.help"
       confirm="if( !confirmDeleteDocumentsForever() ) return false;">
       <category>CURRENT_SELECTION_TRASH_LIST</category>
-      <filter id="canPurge">
-        <rule grant="true">
-          <condition>#{deleteActions.canPurge}</condition>
-        </rule>
-      </filter>
     </action>
 
-    <action id="CURRENT_SELECTION_EMPTY_TRASH" link="#{deleteActions.emptyTrash}"
-      label="command.emptyTrash" icon="" help="command.emptyTrash.help"
-      confirm="if( !confirmEmptyTrash() ) return false;">
+    <action id="CURRENT_SELECTION_UNDELETE" enabled="false"
+      link="#{deleteActions.undeleteSelection}" label="command.undeleteDocs"
+      icon="" help="command.undeleteDocs.help" confirm="if( !confirmUndeleteDocuments() ) return false;">
       <category>CURRENT_SELECTION_TRASH_LIST</category>
-      <filter id="canEmptyTrash">
-        <rule grant="true">
-          <condition>#{deleteActions.canEmptyTrash}</condition>
-        </rule>
-      </filter>
+      <filter-id>canPurge</filter-id>
     </action>
 
-    <action id="CURRENT_SELECTION_UNDELETE" link="#{deleteActions.undeleteSelection}"
+    <action id="CURRENT_SELECTION_UNDELETE_SEL" enabled="true"
+      link="#{contentViewSelectionActions.undeleteSelection(contentView, 'canPurge')}"
       label="command.undeleteDocs" icon="" help="command.undeleteDocs.help"
       confirm="if( !confirmUndeleteDocuments() ) return false;">
       <category>CURRENT_SELECTION_TRASH_LIST</category>
-
-      <filter id="canPurge">
-        <rule grant="true">
-          <condition>#{deleteActions.canPurge}</condition>
-        </rule>
-      </filter>
-
     </action>
 
-    <action id="CURRENT_SELECTION_TRASH" link="#{deleteActions.deleteSelection}"
-      label="command.trashDocs" icon="" help="comand.trashDocs.help"
+    <action id="CURRENT_SELECTION_TRASH" enabled="false"
+      link="#{deleteActions.deleteSelection}" label="command.trashDocs" icon=""
+      help="comand.trashDocs.help" confirm="if( !confirmDeleteDocuments() ) return false;"
+      order="1000">
+      <category>CURRENT_SELECTION_LIST</category>
+      <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
+      <filter-id>canDelete</filter-id>
+    </action>
+
+    <action id="CURRENT_SELECTION_TRASH_SEL" enabled="true"
+      link="#{contentViewSelectionActions.deleteSelection(contentView, 'canDelete')}"
+      label="command.trashDocs" icon="" help="command.trashDocs.help"
       confirm="if( !confirmDeleteDocuments() ) return false;" order="1000">
       <category>CURRENT_SELECTION_LIST</category>
       <category>ORDERABLE_CURRENT_SELECTION_LIST</category>
-
-      <filter id="canDelete">
-        <rule grant="true">
-          <condition>#{deleteActions.canDelete}</condition>
-        </rule>
-      </filter>
-
     </action>
 
   </extension>

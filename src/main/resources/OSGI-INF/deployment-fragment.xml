@@ -3,6 +3,7 @@
 
   <!-- ensure proper override of templates -->
   <require>org.nuxeo.ecm.webapp.base</require>
+  <require>org.nuxeo.ecm.platform.contentview.jsf</require>
 
   <install>
     <!-- unzip the war template -->
